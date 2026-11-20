@@ -15,6 +15,8 @@ Quando tentei acessar a página sem estar logado, o sistema me redirecionou para
 
 ## R2 (Item 11)
 
-Status observado:
+Status observado: 405 (Method Not Allowed).
 
 Explicação:
+
+Ao executar o comando POST na rota `/api/palestrantes`, o servidor retornou o erro 405 porque essa rota aceita apenas requisições GET. Ou seja, não é permitido enviar dados usando o método POST nesse endereço.
