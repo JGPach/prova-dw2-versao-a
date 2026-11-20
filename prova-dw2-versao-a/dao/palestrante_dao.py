@@ -10,6 +10,7 @@ class PalestranteDAO:
     @staticmethod
     def salvar(palestrante):
         db.session.add(palestrante)
+        db.session.commit()
 
     # READ (todos)
     @staticmethod
@@ -29,7 +30,7 @@ class PalestranteDAO:
         palestrante.minutos = minutos
         db.session.commit()
 
-    # DELETE
+    # dELETE
     @staticmethod
     def excluir(palestrante):
         db.session.delete(palestrante)
