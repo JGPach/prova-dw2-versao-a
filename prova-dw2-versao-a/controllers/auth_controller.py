@@ -3,7 +3,7 @@
 
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask import session
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 from models.usuario import Usuario
 from dao.usuario_dao import UsuarioDAO
 
@@ -15,8 +15,10 @@ def login():
     if request.method == "POST":
         usuario = UsuarioDAO.buscar_por_email(request.form["email"])
 
-        if usuario and check_password_hash(usuario.senha_hash,
-                                           request.form["senha"]):
+        if usuario and check_password_hash(
+            usuario.senha_hash,
+            request.form["senha"]
+        ):
             session["usuario_id"] = usuario.id
             session["usuario_nome"] = usuario.nome
             return redirect(url_for("palestrante.index"))
@@ -33,11 +35,16 @@ def cadastro():
             flash("Ja existe uma conta com este e-mail.")
             return render_template("cadastro.html")
 
+        senha_criptografada = generate_password_hash(
+            request.form["senha"]
+        )
+
         usuario = Usuario(
             nome=request.form["nome"],
             email=request.form["email"],
-            senha_hash=request.form["senha"]
+            senha_hash=senha_criptografada
         )
+
         UsuarioDAO.salvar(usuario)
         flash("Conta criada. Faca login para continuar.")
         return redirect(url_for("auth.login"))
