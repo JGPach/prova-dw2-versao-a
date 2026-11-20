@@ -29,8 +29,10 @@ def index():
         return redirect(url_for("palestrante.index"))
 
     # ===== ITEM 3 ====================================================
-    # Conte aqui, na SESSAO, quantas vezes esta pessoa abriu a listagem.
-    # A chave deve se chamar "visitas". O template ja exibe o valor.
+    if "visitas" not in session:
+        session["visitas"] = 0 
+
+        session["visitas"] += 1
     # =================================================================
 
     return render_template("index.html", palestrantes=PalestranteDAO.listar())
