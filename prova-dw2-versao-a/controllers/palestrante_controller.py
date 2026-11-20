@@ -10,8 +10,10 @@ palestrante_bp = Blueprint("palestrante", __name__)
 
 
 # ===== ITEM 5 ========================================================
-# Hoje qualquer pessoa abre as paginas deste Blueprint sem entrar no
-# sistema. Escreva aqui a protecao, em um ponto so.
+@palestrante_bp.before_request
+def verificar_login():
+    if "usuario_id" not in session:
+        return redirect(url_for("auth.login"))
 # =====================================================================
 
 
@@ -30,9 +32,9 @@ def index():
 
     # ===== ITEM 3 ====================================================
     if "visitas" not in session:
-        session["visitas"] = 0 
+        session["visitas"] = 0
 
-        session["visitas"] += 1
+    session["visitas"] += 1
     # =================================================================
 
     return render_template("index.html", palestrantes=PalestranteDAO.listar())
@@ -46,13 +48,13 @@ def editar(id):
     # ===== ITEM 4 ====================================================
     if request.method == "POST":
         nome = request.form["nome"]
-    tema = request.form["tema"]
-    minutos = request.form["minutos"]
+        tema = request.form["tema"]
+        minutos = request.form["minutos"]
 
-    PalestranteDAO.atualizar(palestrante, nome, tema, minutos)
+        PalestranteDAO.atualizar(palestrante, nome, tema, minutos)
 
-    flash("Palestrante atualizado.")
-    return redirect(url_for("palestrante.index"))
+        flash("Palestrante atualizado.")
+        return redirect(url_for("palestrante.index"))
     # =================================================================
 
     return render_template("editar.html", palestrante=palestrante)
