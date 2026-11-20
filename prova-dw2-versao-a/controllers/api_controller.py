@@ -1,9 +1,10 @@
+
 # Controller da API - as rotas daqui respondem DADOS em JSON.
 #
-#   Metodo   Endereco                 O que faz       Sucesso   Recusas
-#   GET      /api/palestrantes            lista todos     200       401
-#   GET      /api/palestrantes/<id>       devolve um      200       401 404   <- ITEM 7
-#   DELETE   /api/palestrantes/<id>       remove          204       401 404   <- ITEM 9
+# Metodo   Endereco                    O que faz       Sucesso   Recusas
+# GET      /api/palestrantes            lista todos     200       401
+# GET      /api/palestrantes/<id>       devolve um      200       401 404
+# DELETE   /api/palestrantes/<id>       remove          204       401 404
 #
 # Toda recusa tem o mesmo formato: {"erro": "mensagem"}.
 
@@ -31,13 +32,19 @@ def listar():
 
 
 # ===== ITEM 7 ========================================================
-# Escreva aqui a rota GET /api/palestrantes/<id>, que devolve UM registro.
-# Se o id nao existir, a resposta e 404 com {"erro": "Palestrante nao encontrado."}.
+@api_bp.route("/palestrantes/<int:id>", methods=["GET"])
+def buscar(id):
+    palestrante = PalestranteDAO.buscar_por_id(id)
+
+    if not palestrante:
+        return jsonify({
+            "erro": "Palestrante nao encontrado."
+        }), 404
+
+    return jsonify(palestrante.para_dicionario()), 200
 # =====================================================================
 
 
 # ===== ITEM 9 ========================================================
-# Escreva aqui a rota DELETE /api/palestrantes/<id>, que remove UM registro.
-# Sucesso: 204, sem corpo. Se o id nao existir: 404 com
-# {"erro": "Palestrante nao encontrado."}.
+# Implementaremos no proximo item.
 # =====================================================================
