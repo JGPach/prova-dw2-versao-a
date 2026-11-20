@@ -1,4 +1,3 @@
-
 # Controller da API - as rotas daqui respondem DADOS em JSON.
 #
 # Metodo   Endereco                    O que faz       Sucesso   Recusas
@@ -46,5 +45,16 @@ def buscar(id):
 
 
 # ===== ITEM 9 ========================================================
-# Implementaremos no proximo item.
+@api_bp.route("/palestrantes/<int:id>", methods=["DELETE"])
+def excluir(id):
+    palestrante = PalestranteDAO.buscar_por_id(id)
+
+    if not palestrante:
+        return jsonify({
+            "erro": "Palestrante nao encontrado."
+        }), 404
+
+    PalestranteDAO.excluir(palestrante)
+
+    return "", 204
 # =====================================================================
